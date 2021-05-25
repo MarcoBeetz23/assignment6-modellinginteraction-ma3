@@ -30,37 +30,37 @@ class Calculator(QDialog):
             Declaring & connecting all buttons -.-...
         """
 
-        self.dial_res.clicked.connect(lambda: self.b_calc_clicked("res"))
-        self.dial_dif.clicked.connect(lambda: self.b_calc_clicked("/"))
-        self.dial_mul.clicked.connect(lambda: self.b_calc_clicked("*"))
-        self.dial_min.clicked.connect(lambda: self.b_calc_clicked("-"))
-        self.dial_plu.clicked.connect(lambda: self.b_calc_clicked("+"))
+        self.dial_res.clicked.connect(lambda: self.__b_calc_clicked("res"))
+        self.dial_dif.clicked.connect(lambda: self.__b_calc_clicked("/"))
+        self.dial_mul.clicked.connect(lambda: self.__b_calc_clicked("*"))
+        self.dial_min.clicked.connect(lambda: self.__b_calc_clicked("-"))
+        self.dial_plu.clicked.connect(lambda: self.__b_calc_clicked("+"))
 
-        self.dial_dot.clicked.connect(lambda: self.b_calc_clicked(","))
-        self.dial_bs.clicked.connect(lambda: self.b_calc_clicked("bs"))
-        self.clear_all.clicked.connect(lambda: self.b_calc_clicked("ca"))
+        self.dial_dot.clicked.connect(lambda: self.__b_calc_clicked(","))
+        self.dial_bs.clicked.connect(lambda: self.__b_calc_clicked("bs"))
+        self.clear_all.clicked.connect(lambda: self.__b_calc_clicked("ca"))
 
-        self.dial_0.clicked.connect(lambda: self.b_calc_clicked("0"))
-        self.dial_1.clicked.connect(lambda: self.b_calc_clicked("1"))
-        self.dial_2.clicked.connect(lambda: self.b_calc_clicked("2"))
-        self.dial_3.clicked.connect(lambda: self.b_calc_clicked("3"))
-        self.dial_4.clicked.connect(lambda: self.b_calc_clicked("4"))
-        self.dial_5.clicked.connect(lambda: self.b_calc_clicked("5"))
-        self.dial_6.clicked.connect(lambda: self.b_calc_clicked("6"))
-        self.dial_7.clicked.connect(lambda: self.b_calc_clicked("7"))
-        self.dial_8.clicked.connect(lambda: self.b_calc_clicked("8"))
-        self.dial_9.clicked.connect(lambda: self.b_calc_clicked("9"))
+        self.dial_0.clicked.connect(lambda: self.__b_calc_clicked("0"))
+        self.dial_1.clicked.connect(lambda: self.__b_calc_clicked("1"))
+        self.dial_2.clicked.connect(lambda: self.__b_calc_clicked("2"))
+        self.dial_3.clicked.connect(lambda: self.__b_calc_clicked("3"))
+        self.dial_4.clicked.connect(lambda: self.__b_calc_clicked("4"))
+        self.dial_5.clicked.connect(lambda: self.__b_calc_clicked("5"))
+        self.dial_6.clicked.connect(lambda: self.__b_calc_clicked("6"))
+        self.dial_7.clicked.connect(lambda: self.__b_calc_clicked("7"))
+        self.dial_8.clicked.connect(lambda: self.__b_calc_clicked("8"))
+        self.dial_9.clicked.connect(lambda: self.__b_calc_clicked("9"))
 
     """
         Declaring button methods ...
     """
 
-    def b_calc_clicked(self, symbol):
+    def __b_calc_clicked(self, symbol):
         if not self.test_started:
             self.test_started = self.__note_test_state_change("BUTTON", self.test_started)
         self.__generate_timestamp(symbol, "BUTTON")
         if symbol == "res":
-            self.calc_result()
+            self.__calc_result()
         elif symbol == "bs":
             self.calc_string = self.calc_string[: -1]
         elif symbol == "ca":
@@ -107,11 +107,11 @@ class Calculator(QDialog):
             k = ","
         if k == "=":  # Wanna calculate result?
             if self.dial_res.isEnabled():
-                self.calc_result()
+                self.__calc_result()
                 self.__generate_timestamp("res", input_type)
                 self.update()
                 return
-        if self.filter_char(k):  # Last filter
+        if self.__filter_char(k):  # Last filter
             return
         self.__generate_timestamp(k, input_type)
         self.calc_string += k
@@ -124,7 +124,7 @@ class Calculator(QDialog):
         - the "=" operator is called "res"
         - Backspace is called "bs"
         - "ca" stands for the "clear all" method
-        - "START" and "END" mark the beginning and ending of the test ("START" is triggert on the fisrt 
+        - "START" and "END" mark the beginning and ending of the test ("START" is triggert on the first 
           key/button press, "END" is printed on closing)
         - differs keystrokes and button presses ("KEYSTROKE" vs "BUTTON")
         
@@ -149,7 +149,7 @@ class Calculator(QDialog):
         Calculating results:
     """
 
-    def calc_result(self):
+    def __calc_result(self):
         d_string = self.calc_string.replace(",", ".")
         d_string = eval(d_string)
         self.result = str(round(d_string, 4)).replace(".", ",")
@@ -161,7 +161,7 @@ class Calculator(QDialog):
         return
 
     @staticmethod
-    def filter_char(char):
+    def __filter_char(char):
         sym = ["/", "*", "-", "+", ","]
         if char.isnumeric():
             return False
