@@ -27,7 +27,7 @@ class Calculator(QDialog):
         self.resize(500, 450)
 
         """
-            Declaring & connecting all buttons...
+            Declaring & connecting all buttons -.-...
         """
 
         self.dial_res.clicked.connect(lambda: self.b_calc_clicked("res"))
@@ -52,7 +52,7 @@ class Calculator(QDialog):
         self.dial_9.clicked.connect(lambda: self.b_calc_clicked("9"))
 
     """
-        Declaring button methods -.- ...
+        Declaring button methods ...
     """
 
     def b_calc_clicked(self, symbol):
@@ -118,7 +118,16 @@ class Calculator(QDialog):
         self.update()
 
     """
-        generating Timestamps:
+        generating Timestamps...
+        keys are shown as follows:
+        - numbers and most of the symboles are printed as they are
+        - the "=" operator is called "res"
+        - Backspace is called "bs"
+        - "ca" stands for the "clear all" method
+        - "START" and "END" mark the beginning and ending of the test ("START" is triggert on the fisrt 
+          key/button press, "END" is printed on closing)
+        - differs keystrokes and button presses ("KEYSTROKE" vs "BUTTON")
+        
     """
 
     @staticmethod
