@@ -57,7 +57,7 @@ class Calculator(QDialog):
 
     def b_calc_clicked(self, symbol):
         if not self.test_started:
-            self.test_started = self.__note_test_state_change("BUTTON", self.test_started, False)
+            self.test_started = self.__note_test_state_change("BUTTON", self.test_started)
         self.__generate_timestamp(symbol, "BUTTON")
         if symbol == "res":
             self.calc_result()
@@ -93,7 +93,7 @@ class Calculator(QDialog):
     def keyPressEvent(self, event):
         input_type = "KEYSTROKE"
         if not self.test_started:
-            self.test_started = self.__note_test_state_change(input_type, self.test_started, False)
+            self.test_started = self.__note_test_state_change(input_type, self.test_started)
         k = event.key()
         if k == 16777219:  # keycode of Backspace
             self.calc_string = self.calc_string[: -1]
@@ -125,15 +125,16 @@ class Calculator(QDialog):
     def __generate_timestamp(symbol, input_type):
         print(str(time.time()) + ", " + str(symbol) + ",", input_type)
 
-    def __note_test_state_change(self, input_type, state, is_ending):
+    def __note_test_state_change(self, input_type, state):
         event_name = "START"
-        if is_ending:
+        if state:
             event_name = "END"
         self.__generate_timestamp(event_name, input_type)
         return not state
 
     def closeEvent(self, event):
-        self.test_started = self.__note_test_state_change("BUTTON", self.test_started, True)
+        if self.test_started:
+            self.__note_test_state_change("BUTTON", self.test_started)
 
     """
         Calculating results:
