@@ -1,4 +1,6 @@
 import sys
+import time
+
 from PyQt5 import uic, Qt
 from PyQt5.QtWidgets import QDialog
 
@@ -16,6 +18,7 @@ class Calculator(QDialog):
         self.calc_list = [""]
         uic.loadUi("calculator.ui", self)
         self.initUI()
+        print("timestamp, key, input_type")
 
     def initUI(self):
         self.setWindowTitle('Calculator')
@@ -51,6 +54,7 @@ class Calculator(QDialog):
     """
 
     def b_calc_clicked(self, symbol):
+        self.__generate_timestamp(symbol, "BUTTON")
         if symbol == "res":
             self.calc_result()
         elif symbol == "bs":
@@ -74,8 +78,8 @@ class Calculator(QDialog):
             self.dial_res.setEnabled(False)
             pass
         self.lineEdit.setText(self.calc_string)
-        print(end="\r")
-        print(self.calc_string, end='')
+        # print(end="\r")
+        # print(self.calc_string, end='')
         self.result_label.setText(str(self.result))
         return
 
@@ -84,9 +88,11 @@ class Calculator(QDialog):
     """
 
     def keyPressEvent(self, event):
+        input_type = "KEYSTROKE"
         k = event.key()
         if k == 16777219:  # keycode of Backspace
             self.calc_string = self.calc_string[: -1]
+            self.__generate_timestamp("bs", input_type)
             self.update()
             return
         if k > 128:  # no relevant characters above this keyID
@@ -97,12 +103,22 @@ class Calculator(QDialog):
         if k == "=":  # Wanna calculate result?
             if self.dial_res.isEnabled():
                 self.calc_result()
+                self.__generate_timestamp("res", input_type)
                 self.update()
                 return
         if self.filter_char(k):  # Last filter
             return
+        self.__generate_timestamp(k, input_type)
         self.calc_string += k
         self.update()
+
+    """
+        generating Timestamps:
+    """
+
+    @staticmethod
+    def __generate_timestamp(symbol, input_type):
+        print(str(time.time()) + ", " + str(symbol) + ",", input_type)
 
     """
         Calculating results:
@@ -116,7 +132,7 @@ class Calculator(QDialog):
         self.calc_list.insert(0, " = " + self.calc_string)
         self.calc_list.insert(0, self.result)
         self.calc_string = self.result
-        print(" = ", self.result)
+        # print(" = ", self.result)
         self.update_list()
         return
 
