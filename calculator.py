@@ -25,102 +25,42 @@ class Calculator(QDialog):
             Declaring & connecting all buttons...
         """
 
-        self.dial_res.clicked.connect(self.res_clicked)
-        self.dial_dif.clicked.connect(self.dif_clicked)
-        self.dial_mul.clicked.connect(self.mul_clicked)
-        self.dial_min.clicked.connect(self.min_clicked)
-        self.dial_plu.clicked.connect(self.plu_clicked)
+        self.dial_res.clicked.connect(lambda: self.b_calc_clicked("res"))
+        self.dial_dif.clicked.connect(lambda: self.b_calc_clicked("/"))
+        self.dial_mul.clicked.connect(lambda: self.b_calc_clicked("*"))
+        self.dial_min.clicked.connect(lambda: self.b_calc_clicked("-"))
+        self.dial_plu.clicked.connect(lambda: self.b_calc_clicked("+"))
 
-        self.dial_dot.clicked.connect(self.dot_clicked)
-        self.dial_bs.clicked.connect(self.bs_clicked)
-        self.clear_all.clicked.connect(self.clear_all_clicked)
+        self.dial_dot.clicked.connect(lambda: self.b_calc_clicked(","))
+        self.dial_bs.clicked.connect(lambda: self.b_calc_clicked("bs"))
+        self.clear_all.clicked.connect(lambda: self.b_calc_clicked("ca"))
 
-        self.dial_0.clicked.connect(self.d0_clicked)
-        self.dial_1.clicked.connect(self.d1_clicked)
-        self.dial_2.clicked.connect(self.d2_clicked)
-        self.dial_3.clicked.connect(self.d3_clicked)
-        self.dial_4.clicked.connect(self.d4_clicked)
-        self.dial_5.clicked.connect(self.d5_clicked)
-        self.dial_6.clicked.connect(self.d6_clicked)
-        self.dial_7.clicked.connect(self.d7_clicked)
-        self.dial_8.clicked.connect(self.d8_clicked)
-        self.dial_9.clicked.connect(self.d9_clicked)
+        self.dial_0.clicked.connect(lambda: self.b_calc_clicked("0"))
+        self.dial_1.clicked.connect(lambda: self.b_calc_clicked("1"))
+        self.dial_2.clicked.connect(lambda: self.b_calc_clicked("2"))
+        self.dial_3.clicked.connect(lambda: self.b_calc_clicked("3"))
+        self.dial_4.clicked.connect(lambda: self.b_calc_clicked("4"))
+        self.dial_5.clicked.connect(lambda: self.b_calc_clicked("5"))
+        self.dial_6.clicked.connect(lambda: self.b_calc_clicked("6"))
+        self.dial_7.clicked.connect(lambda: self.b_calc_clicked("7"))
+        self.dial_8.clicked.connect(lambda: self.b_calc_clicked("8"))
+        self.dial_9.clicked.connect(lambda: self.b_calc_clicked("9"))
 
     """
         Declaring button methods -.- ...
     """
 
-    def res_clicked(self):
-        self.calc_result()
+    def b_calc_clicked(self, symbol):
+        if symbol == "res":
+            self.calc_result()
+        elif symbol == "bs":
+            self.calc_string = self.calc_string[: -1]
+        elif symbol == "ca":
+            self.calc_string = ""
+        else:
+            self.calc_string += symbol
         self.update()
 
-    def dif_clicked(self):
-        self.calc_string += "/"
-        self.update()
-
-    def mul_clicked(self):
-        self.calc_string += "*"
-        self.update()
-
-    def min_clicked(self):
-        self.calc_string += "-"
-        self.update()
-
-    def plu_clicked(self):
-        self.calc_string += "+"
-        self.update()
-
-    def dot_clicked(self):
-        self.calc_string += ","
-        self.update()
-
-    def bs_clicked(self):
-        self.calc_string = self.calc_string[: -1]
-        self.update()
-
-    def clear_all_clicked(self):
-        self.calc_string = ""
-        self.update()
-
-    def d0_clicked(self):
-        self.calc_string += "0"
-        self.update()
-
-    def d1_clicked(self):
-        self.calc_string += "1"
-        self.update()
-
-    def d2_clicked(self):
-        self.calc_string += "2"
-        self.update()
-
-    def d3_clicked(self):
-        self.calc_string += "3"
-        self.update()
-
-    def d4_clicked(self):
-        self.calc_string += "4"
-        self.update()
-
-    def d5_clicked(self):
-        self.calc_string += "5"
-        self.update()
-
-    def d6_clicked(self):
-        self.calc_string += "6"
-        self.update()
-
-    def d7_clicked(self):
-        self.calc_string += "7"
-        self.update()
-
-    def d8_clicked(self):
-        self.calc_string += "8"
-        self.update()
-
-    def d9_clicked(self):
-        self.calc_string += "9"
-        self.update()
 
     """
         Update method:
