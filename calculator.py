@@ -3,6 +3,7 @@ import time
 
 from PyQt5 import uic, Qt
 from PyQt5.QtWidgets import QDialog
+from PyQt5.uic.Compiler.qtproxies import QtGui
 
 
 class Calculator(QDialog):
@@ -19,6 +20,7 @@ class Calculator(QDialog):
         uic.loadUi("calculator.ui", self)
         self.initUI()
         print("timestamp, key, input_type")
+        self.test_started = False
 
     def initUI(self):
         self.setWindowTitle('Calculator')
@@ -54,6 +56,8 @@ class Calculator(QDialog):
     """
 
     def b_calc_clicked(self, symbol):
+        if not self.test_started:
+            self.test_started = self.__note_test_state_change("BUTTON", self.test_started, False)
         self.__generate_timestamp(symbol, "BUTTON")
         if symbol == "res":
             self.calc_result()
@@ -64,7 +68,6 @@ class Calculator(QDialog):
         else:
             self.calc_string += symbol
         self.update()
-
 
     """
         Update method:
@@ -89,6 +92,8 @@ class Calculator(QDialog):
 
     def keyPressEvent(self, event):
         input_type = "KEYSTROKE"
+        if not self.test_started:
+            self.test_started = self.__note_test_state_change(input_type, self.test_started, False)
         k = event.key()
         if k == 16777219:  # keycode of Backspace
             self.calc_string = self.calc_string[: -1]
@@ -120,12 +125,21 @@ class Calculator(QDialog):
     def __generate_timestamp(symbol, input_type):
         print(str(time.time()) + ", " + str(symbol) + ",", input_type)
 
+    def __note_test_state_change(self, input_type, state, is_ending):
+        event_name = "START"
+        if is_ending:
+            event_name = "END"
+        self.__generate_timestamp(event_name, input_type)
+        return not state
+
+    def closeEvent(self, event):
+        self.test_started = self.__note_test_state_change("BUTTON", self.test_started, True)
+
     """
         Calculating results:
     """
 
     def calc_result(self):
-
         d_string = self.calc_string.replace(",", ".")
         d_string = eval(d_string)
         self.result = str(round(d_string, 4)).replace(".", ",")
