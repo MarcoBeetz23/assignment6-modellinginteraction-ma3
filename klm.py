@@ -36,6 +36,7 @@ class Klm_File:
 
     @staticmethod
     def __check_char(char, content):
+        # filters all characters
         string = ""
         if char.isalpha():
             string = char.lower()
@@ -62,6 +63,10 @@ class Klm_File:
             return self.custom_op.get(operator)
         return switch.get(operator)
 
+    """
+        Custom switch for __interpret_operator():
+    """
+
     @staticmethod
     def __setup_custom_op(path):
         switch = None
@@ -80,6 +85,10 @@ class Klm_File:
             dialog("confNVal")
         return switch
 
+    """
+        __results: returns results directly via eval()
+    """
+
     def __results(self, use_cust):
         results = list()
         for line in self.content:
@@ -89,10 +98,18 @@ class Klm_File:
             results.append(eval(line))
         return results
 
+    """
+        calc_results: handles result calculation:
+    """
+
     def calc_results(self):
         self.result_list.append(self.__results(False))
         if self.custom_operation_enabled:
             self.result_list.append(self.__results(True))
+
+    """
+        write_results: Sums up and writes results
+    """
 
     def write_results(self):
         string = ""
@@ -112,6 +129,7 @@ class Klm_File:
         print(string)
 
 
+
 def args_handler():  # how to handle the possible arguments (Dialogtree u.a)
     if len(sys.argv) != 2:
         exception_handler("noArgs")
@@ -126,7 +144,7 @@ def exception_handler(case):  # exiting earlier due to .. reasons
     pass
 
 
-def dialog(case):  # inspired from this website: https://data-flair.training/blogs/python-switch-case/
+def dialog(case):
     switch = {  # a simple dialog manager
         "noArgs": "Please provide a filepath as an argument!",
         "noFile": "Couldn't open file!",
@@ -139,10 +157,23 @@ def dialog(case):  # inspired from this website: https://data-flair.training/blo
     }
     return switch.get(case)
 
+    """
+        the script needs a text file for KLM operator Calculation
+        if needed it is possible to import a custom configuration file (.ini) as result from own measurements
+        the config.-file should be setup like this:
+        
+        [Custom_KLM_Operators]
+        K = 0.24
+        P = 1.60
+        B = 0.15
+        M = 1.30
+        H = 0.50
+        W = 0
+
+    """
 
 def main():
     args = args_handler()
-    operator_defaults = True
     operator_defaults = input(dialog("klmDef?")).lower()[0] != "n"
     if operator_defaults:
         file = Klm_File(args).__dict__
