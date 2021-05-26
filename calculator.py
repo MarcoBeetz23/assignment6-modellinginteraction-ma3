@@ -1,5 +1,6 @@
 import sys
 import time
+from datetime import datetime
 
 from PyQt5 import uic, Qt
 from PyQt5.QtWidgets import QDialog
@@ -36,7 +37,7 @@ class Calculator(QDialog):
         self.dial_min.clicked.connect(lambda: self.__b_calc_clicked("-"))
         self.dial_plu.clicked.connect(lambda: self.__b_calc_clicked("+"))
 
-        self.dial_dot.clicked.connect(lambda: self.__b_calc_clicked(","))
+        self.dial_dot.clicked.connect(lambda: self.__b_calc_clicked("."))
         self.dial_bs.clicked.connect(lambda: self.__b_calc_clicked("bs"))
         self.clear_all.clicked.connect(lambda: self.__b_calc_clicked("ca"))
 
@@ -130,9 +131,12 @@ class Calculator(QDialog):
         
     """
 
+    #fixed bug with timestamp object (marco)
+
     @staticmethod
     def __generate_timestamp(symbol, input_type):
-        print(str(time.time()) + ", " + str(symbol) + ",", input_type)
+        now = str(datetime.now())
+        print(now + ", " + str(symbol) + ",", input_type)
 
     def __note_test_state_change(self, input_type, state):
         event_name = "START"
@@ -162,7 +166,7 @@ class Calculator(QDialog):
 
     @staticmethod
     def __filter_char(char):
-        sym = ["/", "*", "-", "+", ","]
+        sym = ["/", "*", "-", "+", "."]
         if char.isnumeric():
             return False
         if char in sym:
